@@ -1,0 +1,4 @@
+__pycache__
+.idea/
+train_data.pickle
+x_and_y.pickle

@@ -5,8 +5,8 @@ The training set will be a list of tuples in the form of (input,desired_output)
 """
 
 import numpy as np
-# TODO plot the cost function
-import matplotlib.pyplot as plt
+import pickle
+
 
 
 class Neuron:
@@ -47,14 +47,23 @@ class Neuron:
 
         assert isinstance(train_data, list)
         np.random.shuffle(train_data)
+        x = []
+        y = []
+        count = 0
+        for n in range(0, epochs):
 
-        self.mini_batches = [train_data[k:k + mini_batch_size] for k in range(0, len(train_data), mini_batch_size)]
+            self.mini_batches = [train_data[k:k + mini_batch_size] for k in range(0, len(train_data), mini_batch_size)]
 
-        """for each mini_batch we move the weights and biases"""
-        for m in self.mini_batches:
-            self.weight -= learning_rate * self.w_cost_der(m)
-            self.bias -= learning_rate * self.b_cost_der(m)
-            print('Cost function after this mini batch is: {0}'.format(self.cost_function(m)))
+            """for each mini_batch we move the weights and biases"""
+            for m in self.mini_batches:
+                self.weight -= learning_rate * self.w_cost_der(m)
+                self.bias -= learning_rate * self.b_cost_der(m)
+            count += 1
+            x.append(self.cost_function(m))
+            y.append(count)
+            print('Epoch {0} has finished'.format(n))
+        with open('x_and_y.pickle', 'wb') as f:
+            pickle.dump([x, y], f, pickle.HIGHEST_PROTOCOL)
 
         print('Adjusted weight is {0} and bias is {1} '.format(self.weight, self.bias))
 
