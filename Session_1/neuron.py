@@ -8,7 +8,6 @@ import numpy as np
 import pickle
 
 
-
 class Neuron:
     def __init__(self):
         self.bias = np.random.randn(1)[0]
@@ -62,7 +61,8 @@ class Neuron:
             x.append(self.cost_function(m))
             y.append(count)
             print('Epoch {0} has finished'.format(n))
-        with open('x_and_y.pickle', 'wb') as f:
+
+        with open('Session_1/x_and_y.pickle', 'wb') as f:
             pickle.dump([x, y], f, pickle.HIGHEST_PROTOCOL)
 
         print('Adjusted weight is {0} and bias is {1} '.format(self.weight, self.bias))
