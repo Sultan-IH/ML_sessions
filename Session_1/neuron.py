@@ -39,7 +39,6 @@ class Neuron:
 
     def SGD(self, train_data, epochs, mini_batch_size, learning_rate):
         """Stochastic gradient descent"""
-        # TODO include epochs functionality
         self.mini_batch_size = mini_batch_size
 
         """shuffle the data and put it into mini batches"""
