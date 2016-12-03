@@ -1,9 +1,9 @@
 import pickle
 
-from Session_1.neuron import Neuron
+from Session_3.neuron import Neuron
 
 # use pickle to unload train and test data
-with open("Session_1/train_data.pickle", "rb") as f:
+with open("Session_3/train_data.pickle", "rb") as f:
     train_data = pickle.load(f)
 
 n = Neuron()

@@ -1,6 +1,6 @@
-import Session_2.MNIST_loader as mnist
+import Session_4.MNIST_loader as mnist
 
-from Session_2.NNetwork import Network
+from Session_4.NNetwork import Network
 
 train_data, validation_data, test_data = mnist.load_data_wrapper()
 

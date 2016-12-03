@@ -61,7 +61,7 @@ class Neuron:
             y.append(count)
             print('Epoch {0} has finished'.format(n))
 
-        with open('Session_1/x_and_y.pickle', 'wb') as f:
+        with open('Session_3/x_and_y.pickle', 'wb') as f:
             pickle.dump([x, y], f, pickle.HIGHEST_PROTOCOL)
 
         print('Adjusted weight is {0} and bias is {1} '.format(self.weight, self.bias))

@@ -3,14 +3,14 @@ A shallow Neural Network for recognising MNIST dataset.
 Forat of the training_data (grey scale pixels ranging from 0 to 1, the digit)
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # TODO: COMMENT THE SHIT OUT OF THIS CODE
 # TODO: UNDERSTAND EVERY SINGLE DETAIL
-# TODO: add evaluation functionality
 # TODO: saving progress functionality
-# self.biases = [np.random.randn(y, 1) for y in sizes[1:]]
-# self.weights = [np.random.randn(y, x) for x, y in zip(sizes[:-1], sizes[1:])]
+# TODO: the cost function is not working properlys
+
 
 class Network(object):
     def __init__(self, layers):
@@ -18,6 +18,8 @@ class Network(object):
         self.layers = layers
         self.weights = [np.random.randn(y, x) for x, y in zip(layers[:-1], layers[1:])]
         self.biases = [np.random.randn(x, 1) for x in layers[1:]]
+        self._X = []
+        self._Y = []
         print("Network initialised")
 
     def SGD(self, train_data, rate, epochs, mini_batch_size, test_data=None):
@@ -35,9 +37,19 @@ class Network(object):
             for mini_batch in self.mini_batches:
                 self.update_mini_batch(mini_batch, rate)
             if test_data:
-                print("Epoch {0} : {1} / {2}".format(e, self.evaluate(test_data), n_test))
+                print("Epoch {0} : {1} ".format(e, self.evaluate(test_data) / n_test))
             else:
                 print("Epoch {0} is completed.".format(e))
+
+            plot_batch = self.mini_batches[0]
+            cost_function = 0
+            for x, y in plot_batch:
+                cost_function += self.QuadraticCost.get(x, y)
+
+            self._X.append(sum(cost_function) / self.mini_batch_size)
+            self._Y.append(e)
+        plt.plot(self._Y, self._X)
+        plt.show()
 
     def update_mini_batch(self, mini_batch, rate):
         # calculate the activation vector
@@ -54,7 +66,6 @@ class Network(object):
 
     def backprop(self, x, y):
 
-
         nabla_b = [np.zeros(b.shape) for b in self.biases]
         nabla_w = [np.zeros(w.shape) for w in self.weights]
         # feedforward
@@ -66,16 +77,14 @@ class Network(object):
             zs.append(z)
             activation = self.sigmoid(z)
             activations.append(activation)
-        # backward pass
-        delta = self.QuadraticCost.der(activations[-1], y) * self.sigmoid_der(zs[-1])
-
+        delta = self.cost_derivative(activations[-1], y) * self.sigmoid_der(zs[-1])
         nabla_b[-1] = delta
         nabla_w[-1] = np.dot(delta, activations[-2].transpose())
 
         for l in range(2, self.num_layers):
             z = zs[-l]
-            sp = self.sigmoid_der(z)
-            delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
+            sd = self.sigmoid_der(z)
+            delta = np.dot(self.weights[-l + 1].transpose(), delta) * sd
             nabla_b[-l] = delta
             nabla_w[-l] = np.dot(delta, activations[-l - 1].transpose())
         return nabla_b, nabla_w
@@ -100,6 +109,11 @@ class Network(object):
                         for (x, y) in data]
         return sum(int(x == y) for (x, y) in test_results)
 
+    def cost_derivative(self, output_activations, y):
+        """Return the vector of partial derivatives \partial C_x /
+        \partial a for the output activations."""
+        return (output_activations - y)
+
     # Still have to pass in the first parameter like: Network.sigmoid(None, 3)
     @staticmethod
     def sigmoid(z):
@@ -112,7 +126,7 @@ class Network(object):
         return self.sigmoid(z) * (1 - self.sigmoid(z))
 
 
-import Session_2.MNIST_loader as mnist
+import Session_4.MNIST_loader as mnist
 
 train_data, validation_data, test_data = mnist.load_data_wrapper()
 
