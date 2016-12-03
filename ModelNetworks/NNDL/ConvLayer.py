@@ -11,6 +11,7 @@ class ConvPoolLayer(object):
     simplifies the code, so it makes sense to combine them.
     """
 
+
     def __init__(self, filter_shape, image_shape, poolsize=(2, 2),
                  activation_fn=sigmoid):
         """`filter_shape` is a tuple of length 4, whose entries are the number
